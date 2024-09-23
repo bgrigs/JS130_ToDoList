@@ -96,6 +96,47 @@ class TodoList {
     return `${title}\n${list}`;
   }
 
+  forEach(func) {
+    this.todos.forEach(func);
+  }
+
+  filter(func) {
+    let newList = new TodoList(this.title);
+    this.forEach(todo => {
+      if (func(todo)) newList.add(todo);
+    });
+    return newList;
+  }
+
+  findByTitle(title) {
+    return this.filter(todo => todo.title === title).first();
+  }
+
+  allDone() {
+    return this.filter(todo => todo.isDone());
+  }
+
+  allNotDone() {
+    return this.filter(todo => !todo.isDone());
+  }
+
+  markDone(title) {
+    let todo = this.findByTitle(title);
+    if (todo) todo.markDone();
+  }
+
+  markAllDone() {
+    this.forEach(todo => todo.markDone());
+  }
+
+  markAllUndone() {
+    this.forEach(todo => todo.markUndone());
+  }
+
+  toArray() {
+    return this.todos.slice();
+  }
+
   _validateIndex(index) {
     if (!(index in this.todos)) {
       throw new ReferenceError(`invalid index: ${index}`);
